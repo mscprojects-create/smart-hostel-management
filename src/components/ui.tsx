@@ -1,88 +1,112 @@
 import React from "react";
 
-export function PageHeader({ title, subtitle }: { title: string; subtitle?: string }) {
+export function PageHeader({ title, subtitle, kicker }: { title: string; subtitle?: string; kicker?: string }) {
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
-      {subtitle && <p className="text-slate-500 text-sm mt-1">{subtitle}</p>}
+    <div className="mb-7">
+      {kicker && <div className="label-mono mb-2">{kicker}</div>}
+      <h1 className="font-display text-3xl uppercase leading-[0.95] tracking-tight text-ink sm:text-4xl">{title}</h1>
+      <div className="mt-3 h-1 w-16 bg-cobalt" />
+      {subtitle && <p className="mt-3 max-w-2xl font-mono text-xs text-ink/60">{subtitle}</p>}
     </div>
   );
 }
 
 export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded-xl bg-white border border-slate-200 shadow-sm ${className}`}>{children}</div>;
+  return <div className={`card-brutal ${className}`}>{children}</div>;
 }
+
+type Accent = "cobalt" | "coral" | "sun" | "grass" | "ultra" | "ink" | "paper";
+
+const ACCENT_BG: Record<Accent, string> = {
+  cobalt: "bg-cobalt text-white",
+  coral: "bg-coral text-white",
+  sun: "bg-sun text-ink",
+  grass: "bg-grass text-white",
+  ultra: "bg-ultra text-white",
+  ink: "bg-ink text-paper",
+  paper: "bg-panel text-ink",
+};
 
 export function StatCard({
   label,
   value,
   hint,
-  accent = "brand",
+  index,
+  accent = "paper",
 }: {
   label: string;
   value: React.ReactNode;
   hint?: string;
-  accent?: "brand" | "green" | "amber" | "red";
+  index?: string;
+  accent?: Accent;
 }) {
-  const colors: Record<string, string> = {
-    brand: "text-brand-700 bg-brand-50",
-    green: "text-green-700 bg-green-50",
-    amber: "text-amber-700 bg-amber-50",
-    red: "text-red-700 bg-red-50",
-  };
+  const isDark = accent !== "sun" && accent !== "paper";
   return (
-    <Card className="p-5">
-      <div className="text-sm text-slate-500">{label}</div>
-      <div className="mt-2 flex items-end justify-between">
-        <div className="text-3xl font-bold text-slate-900">{value}</div>
-        {hint && <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${colors[accent]}`}>{hint}</span>}
+    <div className={`relative overflow-hidden border-2 border-ink shadow-brutal ${ACCENT_BG[accent]}`}>
+      <div className="flex items-start justify-between px-5 pt-4">
+        <div className={`font-mono text-[11px] font-bold uppercase tracking-[0.16em] ${isDark ? "text-white/75" : "text-ink/60"}`}>
+          {label}
+        </div>
+        {index && (
+          <div className={`font-mono text-[11px] font-bold ${isDark ? "text-white/55" : "text-ink/40"}`}>{index}</div>
+        )}
       </div>
-    </Card>
+      <div className="px-5 pb-5 pt-2">
+        <div className="font-display text-4xl leading-none tracking-tight">{value}</div>
+        {hint && (
+          <div className={`mt-2 inline-block border-2 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${isDark ? "border-white/40 text-white/85" : "border-ink/30 text-ink/70"}`}>
+            {hint}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
 export function Badge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    PENDING: "bg-amber-100 text-amber-800",
-    IN_PROGRESS: "bg-blue-100 text-blue-800",
-    RESOLVED: "bg-green-100 text-green-800",
-    APPROVED: "bg-green-100 text-green-800",
-    REJECTED: "bg-red-100 text-red-800",
-    ACTIVE: "bg-green-100 text-green-800",
-    PAID: "bg-green-100 text-green-800",
-    DUE: "bg-red-100 text-red-800",
+    PENDING: "bg-sun text-ink",
+    IN_PROGRESS: "bg-cobalt text-white",
+    RESOLVED: "bg-grass text-white",
+    APPROVED: "bg-grass text-white",
+    REJECTED: "bg-coral text-white",
+    ACTIVE: "bg-grass text-white",
+    PAID: "bg-grass text-white",
+    DUE: "bg-coral text-white",
   };
-  const cls = map[status] ?? "bg-slate-100 text-slate-700";
-  return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${cls}`}>
-      {status.replace("_", " ")}
-    </span>
-  );
+  const cls = map[status] ?? "bg-panel text-ink";
+  return <span className={`tag ${cls}`}>{status.replace("_", " ")}</span>;
 }
 
 export function EmptyState({ message }: { message: string }) {
-  return <div className="text-center text-slate-400 text-sm py-10">{message}</div>;
+  return (
+    <div className="flex flex-col items-center gap-2 py-12 text-center">
+      <div className="h-3 w-3 rotate-45 border-2 border-ink/30" />
+      <div className="font-mono text-xs uppercase tracking-wider text-ink/45">{message}</div>
+    </div>
+  );
 }
 
-/** Simple dependency-free horizontal bar chart. */
+/** Thick, hard-edged horizontal bars. */
 export function BarChart({ data }: { data: { label: string; value: number; max?: number }[] }) {
   const globalMax = Math.max(1, ...data.map((d) => d.max ?? d.value));
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {data.map((d) => {
         const max = d.max ?? globalMax;
         const pct = Math.min(100, Math.round((d.value / Math.max(1, max)) * 100));
+        const full = d.max ? d.value >= d.max : false;
         return (
           <div key={d.label}>
-            <div className="flex justify-between text-xs text-slate-600 mb-1">
+            <div className="mb-1 flex justify-between font-mono text-[11px] uppercase tracking-wider text-ink/70">
               <span>{d.label}</span>
-              <span className="font-medium">
+              <span className="font-bold text-ink">
                 {d.value}
-                {d.max ? ` / ${d.max}` : ""}
+                {d.max ? `/${d.max}` : ""}
               </span>
             </div>
-            <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">
-              <div className="h-full rounded-full bg-brand-600" style={{ width: `${pct}%` }} />
+            <div className="h-5 border-2 border-ink bg-white">
+              <div className={`h-full ${full ? "bg-coral" : "bg-cobalt"}`} style={{ width: `${pct}%` }} />
             </div>
           </div>
         );
@@ -92,9 +116,13 @@ export function BarChart({ data }: { data: { label: string; value: number; max?:
 }
 
 export function Th({ children }: { children: React.ReactNode }) {
-  return <th className="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 px-4 py-3">{children}</th>;
+  return (
+    <th className="border-b-2 border-ink px-4 py-3 text-left font-mono text-[11px] font-bold uppercase tracking-wider text-ink/60">
+      {children}
+    </th>
+  );
 }
 
 export function Td({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <td className={`px-4 py-3 text-sm text-slate-700 ${className}`}>{children}</td>;
+  return <td className={`px-4 py-3 text-sm text-ink/80 ${className}`}>{children}</td>;
 }

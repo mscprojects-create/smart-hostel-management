@@ -16,8 +16,8 @@ export default async function StudentFees() {
     <div>
       <PageHeader title="My Fees" subtitle="View your fee breakdown and pay online." />
       <div className="grid gap-4 sm:grid-cols-2 mb-6">
-        <StatCard label="Outstanding" value={`₹${due.toLocaleString("en-IN")}`} hint={due ? "due" : "clear"} accent={due ? "red" : "green"} />
-        <StatCard label="Paid" value={`₹${paid.toLocaleString("en-IN")}`} accent="green" />
+        <StatCard index="DUE" label="Outstanding" value={`₹${due.toLocaleString("en-IN")}`} hint={due ? "due" : "clear"} accent={due ? "coral" : "grass"} />
+        <StatCard index="PAID" label="Paid" value={`₹${paid.toLocaleString("en-IN")}`} accent="grass" />
       </div>
       <FeeList
         fees={fees.map((f) => ({

@@ -28,7 +28,7 @@ export default function FeeManager({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const input = "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500";
+  const input = "field-brutal";
 
   async function createInvoice(e: React.FormEvent) {
     e.preventDefault();
@@ -78,7 +78,7 @@ export default function FeeManager({
           <input className={input} placeholder="Title (e.g. Hostel Fee Sem 2)" value={title} onChange={(e) => setTitle(e.target.value)} required />
           <input className={input} type="number" placeholder="Amount (₹)" value={amount} onChange={(e) => setAmount(e.target.value)} required />
           <input className={input} type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
-          <button disabled={busy} className="w-full rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium py-2.5 disabled:opacity-60">
+          <button disabled={busy} className="btn-brutal w-full py-3">
             {busy ? "Creating…" : "Create Invoice"}
           </button>
         </form>

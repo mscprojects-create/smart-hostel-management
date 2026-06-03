@@ -25,7 +25,7 @@ export default function Helpdesk({ complaints }: { complaints: Complaint[] }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const input = "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500";
+  const input = "field-brutal";
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -65,7 +65,7 @@ export default function Helpdesk({ complaints }: { complaints: Complaint[] }) {
           <textarea className={input} rows={4} placeholder="Describe the issue…" value={description} onChange={(e) => setDescription(e.target.value)} required />
           <input className={input} placeholder="Photo URL (optional)" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
           <p className="text-xs text-slate-400">Paste a link to a photo of the issue if you have one.</p>
-          <button disabled={busy} className="w-full rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium py-2.5 disabled:opacity-60">
+          <button disabled={busy} className="btn-brutal w-full py-3">
             {busy ? "Submitting…" : "Submit Ticket"}
           </button>
         </form>

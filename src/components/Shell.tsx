@@ -10,6 +10,12 @@ export interface NavItem {
   icon: string;
 }
 
+const ROLE_TINT: Record<string, string> = {
+  Admin: "bg-coral text-white",
+  Warden: "bg-sun text-ink",
+  Student: "bg-grass text-white",
+};
+
 export default function Shell({
   brand,
   roleLabel,
@@ -25,14 +31,18 @@ export default function Shell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const tint = ROLE_TINT[roleLabel] ?? "bg-cobalt text-white";
 
   const SidebarInner = (
-    <div className="flex h-full flex-col">
-      <div className="px-5 py-5 border-b border-brand-700/40">
-        <div className="text-lg font-bold tracking-tight">🏠 {brand}</div>
-        <div className="text-xs text-brand-200 mt-0.5">{roleLabel} Portal</div>
+    <div className="flex h-full flex-col bg-ink text-paper">
+      <div className="border-b-2 border-paper/15 px-5 py-5">
+        <div className="font-display text-xl uppercase leading-none tracking-tight">{brand}</div>
+        <div className={`mt-2 inline-block border-2 border-ink px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] ${tint}`}>
+          {roleLabel} Portal
+        </div>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+
+      <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-5">
         {nav.map((item) => {
           const active = pathname === item.href;
           return (
@@ -40,23 +50,26 @@ export default function Shell({
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                active ? "bg-white text-brand-800" : "text-brand-100 hover:bg-brand-700/60"
+              className={`flex items-center gap-3 border-2 px-3 py-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-100 ${
+                active
+                  ? "border-ink bg-sun text-ink shadow-[3px_3px_0_0_#FFC233]"
+                  : "border-transparent text-paper/65 hover:border-paper/25 hover:bg-white/5 hover:text-paper"
               }`}
             >
-              <span className="text-base">{item.icon}</span>
+              <span className="text-sm">{item.icon}</span>
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <div className="px-3 py-4 border-t border-brand-700/40">
-        <div className="px-3 pb-3">
-          <div className="text-sm font-medium">{userName}</div>
-          <div className="text-xs text-brand-200">{roleLabel}</div>
+
+      <div className="border-t-2 border-paper/15 px-4 py-4">
+        <div className="px-1 pb-3">
+          <div className="font-display text-sm uppercase tracking-tight">{userName}</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper/50">{roleLabel}</div>
         </div>
         <form action="/api/auth/logout" method="post">
-          <button className="w-full rounded-lg bg-brand-700/60 hover:bg-brand-700 text-white text-sm py-2">
+          <button className="w-full border-2 border-paper bg-coral px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white transition-all duration-100 hover:-translate-y-0.5 active:translate-y-0">
             Sign out
           </button>
         </form>
@@ -66,24 +79,26 @@ export default function Shell({
 
   return (
     <div className="min-h-screen lg:flex">
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 bg-brand-800 text-white">{SidebarInner}</aside>
+      <aside className="hidden w-64 shrink-0 border-r-2 border-ink lg:flex">{SidebarInner}</aside>
 
-      {/* Mobile top bar */}
-      <div className="lg:hidden flex items-center justify-between bg-brand-800 text-white px-4 py-3">
-        <div className="font-bold">🏠 {brand}</div>
-        <button onClick={() => setOpen(!open)} className="rounded-md border border-white/30 px-3 py-1 text-sm">
+      {/* Mobile bar */}
+      <div className="flex items-center justify-between border-b-2 border-ink bg-ink px-4 py-3 text-paper lg:hidden">
+        <div className="font-display text-base uppercase tracking-tight">{brand}</div>
+        <button
+          onClick={() => setOpen(!open)}
+          className="border-2 border-paper px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider"
+        >
           Menu
         </button>
       </div>
       {open && (
-        <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div className="w-64 bg-brand-800 text-white">{SidebarInner}</div>
-          <div className="flex-1 bg-black/40" onClick={() => setOpen(false)} />
+        <div className="fixed inset-0 z-40 flex lg:hidden">
+          <div className="w-64 border-r-2 border-ink">{SidebarInner}</div>
+          <div className="flex-1 bg-ink/50" onClick={() => setOpen(false)} />
         </div>
       )}
 
-      <main className="flex-1 min-w-0 p-5 lg:p-8">{children}</main>
+      <main className="min-w-0 flex-1 p-5 lg:p-9">{children}</main>
     </div>
   );
 }

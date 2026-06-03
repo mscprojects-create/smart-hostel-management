@@ -19,7 +19,7 @@ export default function NoticeManager({ notices }: { notices: Notice[] }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const input = "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500";
+  const input = "field-brutal";
 
   async function post(e: React.FormEvent) {
     e.preventDefault();
@@ -56,7 +56,7 @@ export default function NoticeManager({ notices }: { notices: Notice[] }) {
         <form onSubmit={post} className="space-y-3">
           <input className={input} placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
           <textarea className={input} rows={5} placeholder="Message…" value={body} onChange={(e) => setBody(e.target.value)} required />
-          <button disabled={busy} className="w-full rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium py-2.5 disabled:opacity-60">
+          <button disabled={busy} className="btn-brutal w-full py-3">
             {busy ? "Posting…" : "Post Notice"}
           </button>
         </form>

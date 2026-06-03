@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: #f1f5f9;
+  --paper: #f3eee1;
+  --ink: #16130d;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
@@ -13,11 +18,54 @@ body {
 }
 
 body {
-  background: var(--background);
-  color: #0f172a;
+  color: var(--ink);
+  background-color: var(--paper);
+  /* Ghost graph-paper lattice — the bulletin-board grid underneath everything. */
+  background-image:
+    linear-gradient(to right, rgba(22, 19, 13, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(22, 19, 13, 0.045) 1px, transparent 1px);
+  background-size: 26px 26px;
   -webkit-font-smoothing: antialiased;
 }
 
-* {
-  box-sizing: border-box;
+@layer components {
+  /* Hard-edged card pinned to the board. */
+  .card-brutal {
+    @apply border-2 border-ink bg-panel shadow-brutal;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1 border-2 border-ink px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider;
+  }
+
+  /* Primary action — solid block, hard shadow, presses down on hover. */
+  .btn-brutal {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-cobalt px-4 py-2.5
+           font-mono text-xs font-bold uppercase tracking-wider text-white shadow-brutal
+           transition-all duration-100 hover:-translate-y-0.5 hover:shadow-brutal-lg
+           active:translate-x-1 active:translate-y-1 active:shadow-none disabled:opacity-60
+           disabled:hover:translate-y-0 disabled:hover:shadow-brutal;
+  }
+
+  .btn-ink {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-ink px-4 py-2.5
+           font-mono text-xs font-bold uppercase tracking-wider text-paper shadow-brutal
+           transition-all duration-100 active:translate-x-1 active:translate-y-1 active:shadow-none;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-panel px-4 py-2.5
+           font-mono text-xs font-bold uppercase tracking-wider text-ink
+           transition-all duration-100 hover:bg-paper active:translate-x-0.5 active:translate-y-0.5;
+  }
+
+  .field-brutal {
+    @apply w-full border-2 border-ink bg-white px-3 py-2.5 font-sans text-sm text-ink
+           outline-none transition-shadow placeholder:text-ink/40
+           focus:shadow-brutal-sm;
+  }
+
+  .label-mono {
+    @apply font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-ink/60;
+  }
 }

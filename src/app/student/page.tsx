@@ -27,13 +27,13 @@ export default async function StudentDashboard() {
 
   return (
     <div>
-      <PageHeader title={`Welcome, ${session!.name.split(" ")[0]} 👋`} subtitle="Your hostel at a glance." />
+      <PageHeader kicker={`// ${session!.name}`} title={`Hi, ${session!.name.split(" ")[0]}`} subtitle="Your hostel at a glance." />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Room" value={me?.room?.number ?? "—"} hint={me?.room?.hostel.name ?? "Unassigned"} accent="brand" />
-        <StatCard label="Pending Dues" value={`₹${dues.toLocaleString("en-IN")}`} hint={dues ? "due" : "clear"} accent={dues ? "red" : "green"} />
-        <StatCard label="Open Tickets" value={openComplaints} accent="amber" />
-        <StatCard label="Pending Leaves" value={pendingLeaves} accent="brand" />
+        <StatCard index="RM" label="Room" value={me?.room?.number ?? "—"} hint={me?.room?.hostel.name ?? "Unassigned"} accent="cobalt" />
+        <StatCard index="₹" label="Pending Dues" value={`₹${dues.toLocaleString("en-IN")}`} hint={dues ? "due" : "clear"} accent={dues ? "coral" : "grass"} />
+        <StatCard index="HD" label="Open Tickets" value={openComplaints} accent="sun" />
+        <StatCard index="LV" label="Pending Leaves" value={pendingLeaves} accent="ultra" />
       </div>
 
       <div className="grid gap-5 mt-6 lg:grid-cols-3">

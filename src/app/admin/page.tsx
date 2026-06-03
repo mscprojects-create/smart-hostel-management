@@ -20,18 +20,18 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <PageHeader title="Admin Dashboard" subtitle="Overview of hostel occupancy, dues and grievances." />
+      <PageHeader kicker="// Control room" title="Admin Dashboard" subtitle="Overview of hostel occupancy, dues and grievances." />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Active Students" value={students} hint="residents" accent="brand" />
-        <StatCard label="Occupancy" value={`${occupancyPct}%`} hint={`${occupied}/${totalCapacity} beds`} accent="green" />
-        <StatCard label="Pending Dues" value={`₹${pendingDues.toLocaleString("en-IN")}`} hint="unpaid" accent="red" />
-        <StatCard label="Open Complaints" value={complaints} hint="unresolved" accent="amber" />
+        <StatCard index="01" label="Active Students" value={students} hint="residents" accent="cobalt" />
+        <StatCard index="02" label="Occupancy" value={`${occupancyPct}%`} hint={`${occupied}/${totalCapacity} beds`} accent="grass" />
+        <StatCard index="03" label="Pending Dues" value={`₹${pendingDues.toLocaleString("en-IN")}`} hint="unpaid" accent="coral" />
+        <StatCard index="04" label="Open Complaints" value={complaints} hint="unresolved" accent="sun" />
       </div>
 
       <div className="grid gap-5 mt-6 lg:grid-cols-2">
         <Card className="p-5">
-          <h3 className="font-semibold text-slate-900 mb-4">Room Occupancy</h3>
+          <h3 className="mb-4 font-display text-lg uppercase tracking-tight">Room Occupancy</h3>
           {rooms.length ? (
             <BarChart
               data={rooms.map((r) => ({ label: `Room ${r.number} (${r.type.toLowerCase()})`, value: r._count.students, max: r.capacity }))}
@@ -40,14 +40,14 @@ export default async function AdminDashboard() {
             <EmptyState message="No rooms yet. Add rooms from Hostel & Rooms." />
           )}
           {pendingApprovals > 0 && (
-            <div className="mt-5 rounded-lg bg-amber-50 text-amber-800 text-sm px-3 py-2">
+            <div className="mt-5 border-2 border-ink bg-sun px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide text-ink">
               {pendingApprovals} student registration{pendingApprovals > 1 ? "s" : ""} awaiting approval.
             </div>
           )}
         </Card>
 
         <Card className="p-5">
-          <h3 className="font-semibold text-slate-900 mb-4">Recent Complaints</h3>
+          <h3 className="mb-4 font-display text-lg uppercase tracking-tight">Recent Complaints</h3>
           {recent.length ? (
             <ul className="divide-y divide-slate-100">
               {recent.map((c) => (

@@ -17,9 +17,9 @@ export default async function FeesPage() {
     <div>
       <PageHeader title="Fee Management" subtitle="Generate invoices and track payments." />
       <div className="grid gap-4 sm:grid-cols-3 mb-6">
-        <StatCard label="Total Invoiced" value={`₹${(collected + pending).toLocaleString("en-IN")}`} accent="brand" />
-        <StatCard label="Collected" value={`₹${collected.toLocaleString("en-IN")}`} hint="paid" accent="green" />
-        <StatCard label="Outstanding" value={`₹${pending.toLocaleString("en-IN")}`} hint="due" accent="red" />
+        <StatCard index="01" label="Total Invoiced" value={`₹${(collected + pending).toLocaleString("en-IN")}`} accent="cobalt" />
+        <StatCard index="02" label="Collected" value={`₹${collected.toLocaleString("en-IN")}`} hint="paid" accent="grass" />
+        <StatCard index="03" label="Outstanding" value={`₹${pending.toLocaleString("en-IN")}`} hint="due" accent="coral" />
       </div>
       <FeeManager
         students={students.map((s) => ({ id: s.id, name: s.name }))}

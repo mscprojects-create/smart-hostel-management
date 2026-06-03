@@ -16,11 +16,11 @@ export default async function WardenGrievances() {
 
   return (
     <div>
-      <PageHeader title="Grievance Management" subtitle="Review and resolve complaints raised by students." />
-      <div className="grid gap-4 sm:grid-cols-3 mb-6">
-        <StatCard label="Pending" value={pending} accent="amber" />
-        <StatCard label="In Progress" value={inProgress} accent="brand" />
-        <StatCard label="Resolved" value={resolved} accent="green" />
+      <PageHeader kicker="// Grievance desk" title="Grievance Management" subtitle="Review and resolve complaints raised by students." />
+      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+        <StatCard index="01" label="Pending" value={pending} accent="sun" />
+        <StatCard index="02" label="In Progress" value={inProgress} accent="cobalt" />
+        <StatCard index="03" label="Resolved" value={resolved} accent="grass" />
       </div>
       <GrievanceBoard
         complaints={complaints.map((c) => ({
