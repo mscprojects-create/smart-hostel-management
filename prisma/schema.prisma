@@ -1,0 +1,157 @@
+// Prisma schema for the Smart Hostel Management & Grievance Redressal System
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  WARDEN
+  STUDENT
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+}
+
+enum RoomType {
+  SINGLE
+  DOUBLE
+  DORMITORY
+}
+
+enum ComplaintStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum LeaveType {
+  LEAVE
+  OUTPASS
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Weekday {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @default(STUDENT)
+  status    UserStatus @default(PENDING)
+  phone     String?
+  course    String?
+  year      Int?
+  createdAt DateTime   @default(now())
+
+  // A student belongs to one room (optional until allocated)
+  roomId String?
+  room   Room?   @relation(fields: [roomId], references: [id])
+
+  complaints Complaint[]
+  leaves     Leave[]
+  fees       Fee[]
+  notices    Notice[]
+}
+
+model Hostel {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   @default("BOYS") // BOYS or GIRLS
+  createdAt DateTime @default(now())
+  rooms     Room[]
+}
+
+model Room {
+  id       String   @id @default(cuid())
+  number   String
+  floor    Int      @default(0)
+  capacity Int      @default(2)
+  type     RoomType @default(DOUBLE)
+
+  hostelId String
+  hostel   Hostel @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+
+  students User[]
+}
+
+model Complaint {
+  id          String          @id @default(cuid())
+  title       String
+  category    String          @default("General")
+  description String
+  status      ComplaintStatus @default(PENDING)
+  photoUrl    String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Leave {
+  id        String      @id @default(cuid())
+  type      LeaveType   @default(LEAVE)
+  reason    String
+  fromDate  DateTime
+  toDate    DateTime
+  status    LeaveStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Fee {
+  id        String    @id @default(cuid())
+  title     String
+  amount    Int
+  dueDate   DateTime
+  paid      Boolean   @default(false)
+  paidAt    DateTime?
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Notice {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+
+  postedById String
+  postedBy   User   @relation(fields: [postedById], references: [id], onDelete: Cascade)
+}
+
+model MessMenu {
+  id        String  @id @default(cuid())
+  day       Weekday @unique
+  breakfast String
+  lunch     String
+  snacks    String
+  dinner    String
+}
